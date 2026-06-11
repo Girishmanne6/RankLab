@@ -1,0 +1,20 @@
+__pycache__/
+*.pyc
+.venv/
+.env
+
+data/raw/
+data/processed/
+models/checkpoints/
+*.db
+
+node_modules/
+dashboard/dist/
+
+.pytest_cache/
+*.log
+train_*.log
+
+# OS / editor
+.DS_Store
+Thumbs.db

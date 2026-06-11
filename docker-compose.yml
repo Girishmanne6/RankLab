@@ -1,0 +1,72 @@
+services:
+  db:
+    image: postgres:15
+    environment:
+      POSTGRES_USER: user
+      POSTGRES_PASSWORD: pass
+      POSTGRES_DB: ranklab
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U user -d ranklab"]
+      interval: 5s
+      timeout: 5s
+      retries: 10
+    networks:
+      - ranklab
+
+  backend:
+    build:
+      context: .
+      dockerfile: docker/backend.Dockerfile
+    environment:
+      DATABASE_URL: postgresql://user:pass@db:5432/ranklab
+      DATA_DIR: /app/data/processed
+      MODEL_DIR: /app/models/checkpoints
+      API_HOST: 0.0.0.0
+      API_PORT: "8000"
+      EBNERD_VARIANT: ${EBNERD_VARIANT:-demo}
+      EPOCHS: ${EPOCHS:-50}
+      EMBEDDING_DIM: ${EMBEDDING_DIM:-64}
+      DEVICE: ${DEVICE:-cpu}
+    ports:
+      - "8000:8000"
+    volumes:
+      - data_processed:/app/data/processed
+      - model_checkpoints:/app/models/checkpoints
+    depends_on:
+      db:
+        condition: service_healthy
+    # Bootstrap: download + preprocess data and train all models if missing,
+    # then serve the API.
+    command: >
+      sh -c "python -m data.download &&
+             python -m data.preprocess &&
+             python -m api.train --if-missing &&
+             uvicorn api.main:app --host 0.0.0.0 --port 8000"
+    networks:
+      - ranklab
+
+  frontend:
+    build:
+      context: ./dashboard
+      dockerfile: ../docker/frontend.Dockerfile
+    environment:
+      VITE_API_URL: http://localhost:8000
+    ports:
+      - "5173:5173"
+    depends_on:
+      - backend
+    networks:
+      - ranklab
+
+volumes:
+  pgdata:
+  data_processed:
+  model_checkpoints:
+
+networks:
+  ranklab:
+    driver: bridge
