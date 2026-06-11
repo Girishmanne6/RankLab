@@ -8,6 +8,12 @@ with a focus on reducing popularity bias and improving long-tail content
 exposure. It ships with a live A/B testing dashboard tracking both
 recommendation quality and fairness metrics.
 
+## Screenshots
+
+| Model comparison | Fairness analysis | Live recommendations |
+|---|---|---|
+| ![Model comparison dashboard](docs/screenshots/model-comparison.png) | ![Fairness analysis dashboard](docs/screenshots/fairness-analysis.png) | ![Recommendations explorer](docs/screenshots/recommendations.png) |
+
 ## Why
 
 News recommenders that optimise pure engagement systematically over-expose
