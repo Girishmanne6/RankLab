@@ -218,18 +218,3 @@ pytest tests/ -v
   Recommendation.** RecSys 2024 Challenge.
 - Rendle, S., et al. (2009). **BPR: Bayesian Personalized Ranking from
   Implicit Feedback.** UAI 2009.
-
-## Resume bullets
-
-> - Built **RankLab**, a responsible news-recommendation platform on the
->   EB-NeRD benchmark (RecSys 2024): five models implemented from scratch in
->   PyTorch — popularity/recency baselines, item-item CF, **LightGCN** (SIGIR
->   2020) and **XSimGCL** (TKDE 2023) — served via FastAPI + PostgreSQL +
->   React, fully containerised with Docker Compose.
-> - Implemented every evaluation metric from scratch (Recall@10, NDCG@10,
->   MRR, p95 latency) plus fairness instrumentation (intra-list diversity,
->   freshness, long-tail exposure, popularity-bias correlation) on EB-NeRD
->   small (18K users, 8.9K items, 4.4M interactions).
-> - Designed an A/B testing framework with deterministic user bucketing,
->   PostgreSQL-backed observation logging, and Welch's t-test significance
->   reporting, surfaced in a live Recharts dashboard.
